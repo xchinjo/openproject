@@ -215,7 +215,9 @@ describe MailHandler, type: :model do
 
           it 'sends a mail as a work package has been created' do
             subject
+
             # Email notification should be sent
+            perform_enqueued_jobs
             mail = ActionMailer::Base.deliveries.last
 
             expect(mail)
@@ -258,11 +260,12 @@ describe MailHandler, type: :model do
             expect(work_package.author.lastname).to eq('Doe')
 
             # account information
-            email = ActionMailer::Base.deliveries.first
-            expect(email).not_to be_nil
-            expect(email.subject).to eq(I18n.t('mail_subject_register', value: Setting.app_title))
-            login = email.body.encoded.match(/\* Username: (\S+)\s?$/)[1]
-            password = email.body.encoded.match(/\* Password: (\S+)\s?$/)[1]
+            perform_enqueued_jobs
+        email = ActionMailer::Base.deliveries.first
+        expect(email).not_to be_nil
+        expect(email.subject).to eq(I18n.t('mail_subject_register', value: Setting.app_title))
+        login = email.body.encoded.match(/\* Username: (\S+)\s?$/)[1]
+        password = email.body.encoded.match(/\* Password: (\S+)\s?$/)[1]
 
             # Can't log in here since randomly assigned password must be changed
             found_user = User.find_by_login(login)
