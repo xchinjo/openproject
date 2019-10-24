@@ -157,7 +157,11 @@ module OpenProject
       'show_warning_bars' => true,
 
       # Render storage information
-      'show_storage_information' => true
+      'show_storage_information' => true,
+
+      # Log errors to sentry instance
+      'sentry_dsn' => 'https://0c3b94bf056749b6b6c887e79c22d94a@sentry.openproject.com/7',
+      'sentry_host' => 'https://sentry.openproject.com'
     }
 
     @config = nil
